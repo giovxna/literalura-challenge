@@ -13,4 +13,5 @@ public interface LivroRepository extends JpaRepository<Livro, Long> {
     List<Livro> findByGenero(String genero);
     List<Livro> findByEditora(String editora);
     List<Livro> findByDataPublicacaoBetween(LocalDate startDate, LocalDate endDate);
+    Iterable<Livro> findByIdioma(String idioma);
 }

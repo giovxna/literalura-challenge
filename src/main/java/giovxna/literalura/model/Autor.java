@@ -1,9 +1,7 @@
 package giovxna.literalura.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,16 +9,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Getter
+@Setter
 public class Autor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nome;
     private int anoNascimento;
     private int anoFalecimento;
+    private int ano;
     private String nacionalidade;
 
-    @OneToMany(mappedBy = "autor")
+    @OneToMany(mappedBy = "autor", fetch = FetchType.EAGER)
     private List<Livro> livros;
 }
