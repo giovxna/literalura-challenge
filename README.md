@@ -7,8 +7,9 @@ LiterAlura is a book catalog application developed using Java, Spring Boot, Hibe
 
 ## Features
 
-- Top 10 Books: Generate a list of the top 10 most downloaded books.
-- Statistics: Provides statistics about the books cataloged.
+- Search by Title: Search for books by their title using the Gutendex API.
+- List Authors: Display a list of authors along with their details.
+- Multi-language Support: Supports books in multiple languages.
 
 ## Dependencies
 - Java 11 or higher
