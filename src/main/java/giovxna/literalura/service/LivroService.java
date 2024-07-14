@@ -19,10 +19,6 @@ public class LivroService {
         return livroRepository.findAll();
     }
 
-    public List<Livro> findByAutorId(Long autorId) {
-        return livroRepository.findByAutoresId(autorId);
-    }
-
     public List<Livro> buscarPorTitulo(String titulo) {
         return livroRepository.findByTituloContaining(titulo);
     }
@@ -56,7 +52,6 @@ public class LivroService {
         Livro livro = new Livro();
         livro.setTitulo(livroDTO.getTitle());
         livro.setIdioma(String.join(", ", livroDTO.getLanguages()));
-
         List<Autor> autores = livroDTO.getAuthors().stream()
                 .map(dto -> {
                     Autor autor = new Autor();

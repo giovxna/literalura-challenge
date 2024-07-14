@@ -73,10 +73,10 @@ public class Menu {
 
             System.out.println("Livro encontrado e salvo no banco de dados:");
             System.out.println("Título: " + livro.getTitulo());
-            System.out.println("Autor(es): " + livro.getAutores().stream()
+            System.out.println("Autor: " + livro.getAutores().stream()
                     .map(Autor::getNome)
                     .collect(Collectors.joining(", ")));
-            System.out.println("Idiomas: " + livro.getIdioma());
+            System.out.println("Idioma: " + livro.getIdioma());
         } catch (Exception e) {
             System.out.println("Livro não encontrado.");
         }
@@ -88,7 +88,7 @@ public class Menu {
             System.out.println("Nenhum livro registrado.");
         } else {
             livros.forEach(livro -> {
-                System.out.println("ID: " + livro.getId() + ", Título: " + livro.getTitulo());
+                System.out.println("Título: " + livro.getTitulo());
             });
         }
     }
@@ -99,7 +99,7 @@ public class Menu {
             System.out.println("Nenhum autor registrado.");
         } else {
             autores.forEach(autor -> {
-                System.out.println("ID: " + autor.getId() + ", Nome: " + autor.getNome());
+                System.out.println("Nome: " + autor.getNome());
             });
         }
     }
@@ -113,7 +113,7 @@ public class Menu {
             System.out.println("Nenhum autor encontrado para o ano " + ano + ".");
         } else {
             autores.forEach(autor -> {
-                System.out.println("ID: " + autor.getId() + ", Nome: " + autor.getNome());
+                System.out.println("Nome: " + autor.getNome());
             });
         }
     }
@@ -126,7 +126,7 @@ public class Menu {
             System.out.println("Nenhum livro encontrado para o idioma " + idioma + ".");
         } else {
             livros.forEach(livro -> {
-                System.out.println("ID: " + livro.getId() + ", Título: " + livro.getTitulo());
+                System.out.println("Título: " + livro.getTitulo());
             });
         }
     }
