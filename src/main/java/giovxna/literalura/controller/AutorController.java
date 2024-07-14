@@ -2,46 +2,45 @@ package giovxna.literalura.controller;
 
 import giovxna.literalura.model.Autor;
 import giovxna.literalura.repository.AutorRepository;
+import giovxna.literalura.service.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/autores")
 public class AutorController {
 
     @Autowired
-    private AutorRepository autorRepository;
+    private AutorService autorService;
 
     @GetMapping
-    public Iterable<Autor> listarTodosAutores() {
-        return autorRepository.findAll();
+    public List<Autor> listarTodosAutores() {
+        return autorService.listarTodos();
     }
 
     @GetMapping("/nome/{nome}")
-    public Iterable<Autor> buscarPorNome(@PathVariable String nome) {
-        return autorRepository.findByNomeContaining(nome);
+    public List<Autor> buscarPorNome(@PathVariable String nome) {
+        return autorService.buscarPorNome(nome);
     }
 
     @GetMapping("/ano/{ano}")
-    public Iterable<Autor> buscarPorAno(@PathVariable int ano) {
-        return autorRepository.findByAnoNascimento(ano);
+    public List<Autor> buscarPorAno(@PathVariable int ano) {
+        return autorService.listarPorAnoNascimento(ano);
     }
 
     @PostMapping
     public Autor cadastrarAutor(@RequestBody Autor autor) {
-        return autorRepository.save(autor);
+        return autorService.salvar(autor);
     }
 
     @PutMapping("/{id}")
     public Autor atualizarAutor(@PathVariable Long id, @RequestBody Autor autor) {
-        autor.setId(id);
-        return autorRepository.save(autor);
+        return autorService.atualizar(id, autor);
     }
 
     @DeleteMapping("/{id}")
     public void deletarAutor(@PathVariable Long id) {
-        autorRepository.deleteById(id);
+        autorService.deletar(id);
     }
 }
