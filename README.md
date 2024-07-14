@@ -1,6 +1,7 @@
 ## LiterAlura
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+<img src="https://github.com/giovxna/literalura-challenge/blob/main/badge%20literalura.png" width="150px" align="right">
 
 LiterAlura is a book catalog application developed using Java, Spring Boot, Hibernate, and an H2 database. It integrates with the Gutendex API to fetch book information based on user input.
 
