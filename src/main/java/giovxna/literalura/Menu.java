@@ -4,6 +4,7 @@ import giovxna.literalura.model.Autor;
 import giovxna.literalura.model.Livro;
 import giovxna.literalura.repository.AutorRepository;
 import giovxna.literalura.repository.LivroRepository;
+import giovxna.literalura.service.GutendexBook;
 import giovxna.literalura.service.GutendexService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,14 +37,7 @@ public class Menu {
 
             switch (opcao) {
                 case 1:
-                    System.out.println("Digite o título do livro:");
-                    String titulo = scanner.nextLine();
-                    try {
-                        Livro livro = gutendexService.buscarLivroPorTitulo(titulo);
-                        System.out.println("Livro encontrado e salvo: " + livro.getTitulo());
-                    } catch (RuntimeException e) {
-                        System.out.println(e.getMessage());
-                    }
+                    buscarLivroPorTitulo(scanner);
                     break;
                 case 2:
                     listarLivrosRegistrados();
@@ -52,10 +46,10 @@ public class Menu {
                     listarAutores();
                     break;
                 case 4:
-                    listarAutoresPorAno();
+                    listarAutoresPorAno(scanner);
                     break;
                 case 5:
-                    listarLivrosPorIdioma();
+                    listarLivrosPorIdioma(scanner);
                     break;
                 case 0:
                     System.exit(0);
@@ -63,6 +57,26 @@ public class Menu {
                     System.out.println("Opção inválida!");
             }
         }
+    }
+
+    private void buscarLivroPorTitulo(Scanner scanner) {
+        System.out.println("Digite o título do livro:");
+        String titulo = scanner.nextLine();
+        try {
+            GutendexBook livroDTO = gutendexService.buscarLivroPorTitulo(titulo);
+            Livro livro = converterParaLivro(livroDTO);
+            livroRepository.save(livro);
+            System.out.println("Livro encontrado e salvo: " + livro.getTitulo());
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private Livro converterParaLivro(GutendexBook livroDTO) {
+        Livro livro = new Livro();
+        livro.setTitulo(livroDTO.getTitle());
+
+        return livro;
     }
 
     private void listarLivrosRegistrados() {
@@ -79,18 +93,16 @@ public class Menu {
         }
     }
 
-    private void listarAutoresPorAno() {
-        Scanner scanner = new Scanner(System.in);
+    private void listarAutoresPorAno(Scanner scanner) {
         System.out.println("Digite o ano:");
         int ano = scanner.nextInt();
-        Iterable<Autor> autores = autorRepository.findByAno(ano);
+        Iterable<Autor> autores = autorRepository.findByAnoNascimento(ano);
         for (Autor autor : autores) {
             System.out.println(autor);
         }
     }
 
-    private void listarLivrosPorIdioma() {
-        Scanner scanner = new Scanner(System.in);
+    private void listarLivrosPorIdioma(Scanner scanner) {
         System.out.println("Digite o idioma (PT, EN, ES, FR):");
         String idioma = scanner.nextLine();
         Iterable<Livro> livros = livroRepository.findByIdioma(idioma);

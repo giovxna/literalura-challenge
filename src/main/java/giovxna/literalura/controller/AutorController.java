@@ -1,7 +1,7 @@
 package giovxna.literalura.controller;
 
 import giovxna.literalura.model.Autor;
-import giovxna.literalura.service.AutorService;
+import giovxna.literalura.repository.AutorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,25 +12,36 @@ import java.util.List;
 public class AutorController {
 
     @Autowired
-    private AutorService autorService;
+    private AutorRepository autorRepository;
 
     @GetMapping
-    public List<Autor> listarTodosAutores() {
-        return autorService.listarTodosAutores();
+    public Iterable<Autor> listarTodosAutores() {
+        return autorRepository.findAll();
     }
 
     @GetMapping("/nome/{nome}")
-    public List<Autor> buscarPorNome(@PathVariable String nome) {
-        return autorService.buscarPorNome(nome);
+    public Iterable<Autor> buscarPorNome(@PathVariable String nome) {
+        return autorRepository.findByNomeContaining(nome);
     }
 
-    @GetMapping("/nacionalidade/{nacionalidade}")
-    public List<Autor> buscarPorNacionalidade(@PathVariable String nacionalidade) {
-        return autorService.buscarPorNacionalidade(nacionalidade);
+    @GetMapping("/ano/{ano}")
+    public Iterable<Autor> buscarPorAno(@PathVariable int ano) {
+        return autorRepository.findByAnoNascimento(ano);
     }
 
-    @GetMapping("/ano-nascimento")
-    public List<Autor> buscarPorPeriodoNascimento(@RequestParam("start") int startYear, @RequestParam("end") int endYear) {
-        return autorService.buscarPorPeriodoNascimento(startYear, endYear);
+    @PostMapping
+    public Autor cadastrarAutor(@RequestBody Autor autor) {
+        return autorRepository.save(autor);
+    }
+
+    @PutMapping("/{id}")
+    public Autor atualizarAutor(@PathVariable Long id, @RequestBody Autor autor) {
+        autor.setId(id);
+        return autorRepository.save(autor);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletarAutor(@PathVariable Long id) {
+        autorRepository.deleteById(id);
     }
 }

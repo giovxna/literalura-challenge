@@ -7,11 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
-@Repository
 public interface LivroRepository extends JpaRepository<Livro, Long> {
     List<Livro> findByTituloContaining(String titulo);
-    List<Livro> findByGenero(String genero);
-    List<Livro> findByEditora(String editora);
-    List<Livro> findByDataPublicacaoBetween(LocalDate startDate, LocalDate endDate);
-    Iterable<Livro> findByIdioma(String idioma);
+    List<Livro> findByIdioma(String idioma);
+    List<Livro> findByAutorId(Long idAutor);
 }

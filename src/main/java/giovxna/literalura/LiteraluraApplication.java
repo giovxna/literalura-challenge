@@ -13,18 +13,18 @@ import org.springframework.context.annotation.Bean;
 import java.util.List;
 import java.util.Scanner;
 
-
 @SpringBootApplication
-public class LiteraluraApplication {
+public class LiteraluraApplication implements CommandLineRunner {
+
+	@Autowired
+	private Menu menu;
 
 	public static void main(String[] args) {
 		SpringApplication.run(LiteraluraApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner run(Menu menu) {
-		return args -> {
-			menu.exibirMenu();
-		};
+	@Override
+	public void run(String... args) throws Exception {
+		menu.exibirMenu();
 	}
 }

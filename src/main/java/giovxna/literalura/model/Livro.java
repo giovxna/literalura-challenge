@@ -9,23 +9,18 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Getter
 @Setter
+@Entity
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String titulo;
     private String idioma;
-    private int downloads;
-    private LocalDate dataPublicacao;
-    private String genero;
-    private String editora;
+    private int anoPublicacao;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "autor_id")
+    @ManyToOne
     private Autor autor;
 
 }

@@ -21,6 +21,6 @@ public class Autor {
     private int ano;
     private String nacionalidade;
 
-    @OneToMany(mappedBy = "autor", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "autor")
     private List<Livro> livros;
 }
