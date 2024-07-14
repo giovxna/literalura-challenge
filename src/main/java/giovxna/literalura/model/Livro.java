@@ -5,13 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Livro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +19,11 @@ public class Livro {
     private String idioma;
     private int anoPublicacao;
 
-    @ManyToOne
-    private Autor autor;
-
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "livro_autor",
+            joinColumns = @JoinColumn(name = "livro_id"),
+            inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
+    private List<Autor> autores;
 }

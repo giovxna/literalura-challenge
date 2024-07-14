@@ -16,6 +16,7 @@ public class Autor {
     private String nome;
     private int anoNascimento;
 
-    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "autores")
     private List<Livro> livros;
 }
+

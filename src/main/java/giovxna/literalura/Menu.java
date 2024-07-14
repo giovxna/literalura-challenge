@@ -1,15 +1,18 @@
 package giovxna.literalura;
 
+import giovxna.literalura.dto.LivroDTO;
 import giovxna.literalura.model.Autor;
 import giovxna.literalura.model.Livro;
-import giovxna.literalura.repository.AutorRepository;
-import giovxna.literalura.repository.LivroRepository;
-import giovxna.literalura.service.GutendexBook;
+import giovxna.literalura.service.AutorService;
 import giovxna.literalura.service.GutendexService;
+import giovxna.literalura.service.GutendexAuthor;
+import giovxna.literalura.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Component
 public class Menu {
@@ -18,10 +21,10 @@ public class Menu {
     private GutendexService gutendexService;
 
     @Autowired
-    private LivroRepository livroRepository;
+    private LivroService livroService;
 
     @Autowired
-    private AutorRepository autorRepository;
+    private AutorService autorService;
 
     public void exibirMenu() {
         Scanner scanner = new Scanner(System.in);
@@ -35,30 +38,27 @@ public class Menu {
             int opcao = scanner.nextInt();
             scanner.nextLine();
 
-            try {
-                switch (opcao) {
-                    case 1:
-                        buscarLivroPorTitulo(scanner);
-                        break;
-                    case 2:
-                        listarLivrosRegistrados();
-                        break;
-                    case 3:
-                        listarAutores();
-                        break;
-                    case 4:
-                        listarAutoresPorAno(scanner);
-                        break;
-                    case 5:
-                        listarLivrosPorIdioma(scanner);
-                        break;
-                    case 0:
-                        System.exit(0);
-                    default:
-                        System.out.println("Opção inválida!");
-                }
-            } catch (RuntimeException e) {
-                System.out.println("Erro: " + e.getMessage());
+            switch (opcao) {
+                case 1:
+                    buscarLivroPorTitulo(scanner);
+                    break;
+                case 2:
+                    listarLivrosRegistrados();
+                    break;
+                case 3:
+                    listarAutores();
+                    break;
+                case 4:
+                    listarAutoresPorAno(scanner);
+                    break;
+                case 5:
+                    listarLivrosPorIdioma(scanner);
+                    break;
+                case 0:
+                    System.out.println("Saindo...");
+                    return;
+                default:
+                    System.out.println("Opção inválida");
             }
         }
     }
@@ -66,44 +66,68 @@ public class Menu {
     private void buscarLivroPorTitulo(Scanner scanner) {
         System.out.println("Digite o título do livro:");
         String titulo = scanner.nextLine();
-        GutendexBook livroDTO = gutendexService.buscarLivroPorTitulo(titulo);
-        if (livroDTO != null) {
-            Livro livro = converterParaLivro(livroDTO);
-            livroRepository.save(livro);
-            System.out.println("Livro encontrado e salvo: " + livro.getTitulo());
-        } else {
-            System.out.println("Livro não encontrado");
+        try {
+            LivroDTO livroDTO = gutendexService.buscarLivroPorTitulo(titulo);
+            Livro livro = livroService.converterDtoParaLivro(livroDTO);
+            livroService.salvar(livro);
+
+            System.out.println("Livro encontrado e salvo no banco de dados:");
+            System.out.println("Título: " + livro.getTitulo());
+            System.out.println("Autor(es): " + livro.getAutores().stream()
+                    .map(Autor::getNome)
+                    .collect(Collectors.joining(", ")));
+            System.out.println("Idiomas: " + livro.getIdioma());
+        } catch (Exception e) {
+            System.out.println("Livro não encontrado.");
         }
     }
 
-    private Livro converterParaLivro(GutendexBook livroDTO) {
-        Livro livro = new Livro();
-        livro.setTitulo(livroDTO.getTitle());
-        livro.setIdioma(livroDTO.getLanguages().toString());
-        return livro;
-    }
-
     private void listarLivrosRegistrados() {
-        Iterable<Livro> livros = livroRepository.findAll();
-        livros.forEach(System.out::println);
+        List<Livro> livros = livroService.listarTodos();
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro registrado.");
+        } else {
+            livros.forEach(livro -> {
+                System.out.println("ID: " + livro.getId() + ", Título: " + livro.getTitulo());
+            });
+        }
     }
 
     private void listarAutores() {
-        Iterable<Autor> autores = autorRepository.findAll();
-        autores.forEach(System.out::println);
+        List<Autor> autores = autorService.listarTodos();
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor registrado.");
+        } else {
+            autores.forEach(autor -> {
+                System.out.println("ID: " + autor.getId() + ", Nome: " + autor.getNome());
+            });
+        }
     }
 
     private void listarAutoresPorAno(Scanner scanner) {
-        System.out.println("Digite o ano:");
+        System.out.println("Digite o ano de nascimento:");
         int ano = scanner.nextInt();
-        Iterable<Autor> autores = autorRepository.findByAnoNascimento(ano);
-        autores.forEach(System.out::println);
+        scanner.nextLine();
+        List<Autor> autores = autorService.listarPorAnoNascimento(ano);
+        if (autores.isEmpty()) {
+            System.out.println("Nenhum autor encontrado para o ano " + ano + ".");
+        } else {
+            autores.forEach(autor -> {
+                System.out.println("ID: " + autor.getId() + ", Nome: " + autor.getNome());
+            });
+        }
     }
 
     private void listarLivrosPorIdioma(Scanner scanner) {
-        System.out.println("Digite o idioma (PT, EN, ES, FR):");
+        System.out.println("Digite o idioma:");
         String idioma = scanner.nextLine();
-        Iterable<Livro> livros = livroRepository.findByIdioma(idioma);
-        livros.forEach(System.out::println);
+        List<Livro> livros = livroService.listarPorIdioma(idioma);
+        if (livros.isEmpty()) {
+            System.out.println("Nenhum livro encontrado para o idioma " + idioma + ".");
+        } else {
+            livros.forEach(livro -> {
+                System.out.println("ID: " + livro.getId() + ", Título: " + livro.getTitulo());
+            });
+        }
     }
 }

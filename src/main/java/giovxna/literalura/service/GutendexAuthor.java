@@ -1,22 +1,10 @@
 package giovxna.literalura.service;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class GutendexAuthor {
-    @JsonProperty("name")
     private String name;
-
-    @JsonProperty("birth_date")
     private String birthDate;
-
-    @JsonProperty("death_date")
     private String deathDate;
 }

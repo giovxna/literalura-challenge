@@ -7,5 +7,5 @@ import java.util.List;
 public interface LivroRepository extends JpaRepository<Livro, Long> {
     List<Livro> findByTituloContaining(String titulo);
     List<Livro> findByIdioma(String idioma);
-    List<Livro> findByAutorId(Long idAutor);
+    List<Livro> findByAutoresId(Long autorId);
 }

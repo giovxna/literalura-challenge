@@ -1,49 +1,46 @@
 package giovxna.literalura.controller;
 
 import giovxna.literalura.model.Livro;
-import giovxna.literalura.repository.LivroRepository;
-import giovxna.literalura.service.GutendexService;
+import giovxna.literalura.service.LivroService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/livros")
 public class LivroController {
 
     @Autowired
-    private LivroRepository livroRepository;
-
-    @Autowired
-    private GutendexService gutendexService;
+    private LivroService livroService;
 
     @GetMapping
-    public Iterable<Livro> listarTodosLivros() {
-        return livroRepository.findAll();
+    public List<Livro> listarTodosLivros() {
+        return livroService.listarTodos();
     }
 
     @GetMapping("/titulo/{titulo}")
-    public Iterable<Livro> buscarPorTitulo(@PathVariable String titulo) {
-        return livroRepository.findByTituloContaining(titulo);
+    public List<Livro> buscarPorTitulo(@PathVariable String titulo) {
+        return livroService.buscarPorTitulo(titulo);
     }
 
     @GetMapping("/idioma/{idioma}")
-    public Iterable<Livro> buscarPorIdioma(@PathVariable String idioma) {
-        return livroRepository.findByIdioma(idioma);
+    public List<Livro> buscarPorIdioma(@PathVariable String idioma) {
+        return livroService.listarPorIdioma(idioma);
     }
 
     @PostMapping
     public Livro cadastrarLivro(@RequestBody Livro livro) {
-        return livroRepository.save(livro);
+        return livroService.salvar(livro);
     }
 
     @PutMapping("/{id}")
     public Livro atualizarLivro(@PathVariable Long id, @RequestBody Livro livro) {
-        livro.setId(id);
-        return livroRepository.save(livro);
+        return livroService.atualizar(id, livro);
     }
 
     @DeleteMapping("/{id}")
     public void deletarLivro(@PathVariable Long id) {
-        livroRepository.deleteById(id);
+        livroService.deletar(id);
     }
 }

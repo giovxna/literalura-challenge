@@ -1,16 +1,12 @@
 package giovxna.literalura.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import giovxna.literalura.service.GutendexAuthor;
+import lombok.Data;
+import java.util.List;
 
-import java.time.LocalDate;
-
-@Getter
-@Setter
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
 public class LivroDTO {
     private String title;
-    private String language;
-    private String authors;
+    private List<String> languages;
+    private List<GutendexAuthor> authors;
 }

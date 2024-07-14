@@ -1,20 +1,11 @@
 package giovxna.literalura.service;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import giovxna.literalura.dto.LivroDTO;
+import lombok.*;
 
 import java.util.List;
 
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class GutendexResponse {
-    private int count;
-    private String next;
-    private String previous;
-    private List<GutendexBook> results;
+    private List<LivroDTO> results;
 }
